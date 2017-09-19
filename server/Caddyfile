@@ -1,0 +1,13 @@
+http://infinity.alvarcarto.com, https://infinity.alvarcarto.com {
+  gzip
+  log /var/log/access.log {
+    rotate_size 100 # Rotate after 100 MB
+    rotate_keep 50  # Keep at most 50 log files
+  }
+
+  proxy  / 127.0.0.1:7000 {
+    transparent
+    without /
+  }
+  header / Access-Control-Allow-Origin *
+}
