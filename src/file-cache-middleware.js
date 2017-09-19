@@ -47,7 +47,7 @@ function createMiddleware(_opts = {}) {
             encoding: null,
           }))
             .tap((response) => {
-              if (response.body) {
+              if (response.statusCode === 200 && response.body) {
                 return fs.writeFileAsync(filePath, response.body, { encoding: null });
               }
 
