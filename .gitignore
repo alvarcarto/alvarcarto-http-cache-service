@@ -1,0 +1,7 @@
+*.mbtiles
+node_modules
+.env
+*.inlined.html
+.geocode-cache.json
+
+cache
