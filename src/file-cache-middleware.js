@@ -57,6 +57,9 @@ function createMiddleware(_opts = {}) {
             .tap((response) => {
               if (response.statusCode === 200 && response.body) {
                 const meta = {
+                  meta: {
+                    originalUrl: req.originalUrl,
+                  },
                   headers: {
                     'content-type': response.headers['content-type'],
                   },
