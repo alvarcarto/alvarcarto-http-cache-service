@@ -49,7 +49,12 @@ function createMiddleware(_opts = {}) {
             .tap(response => fs.writeFileAsync(filePath, response.body, { encoding: null }))
             .then((response) => {
               res.status(response.statusCode);
-              res.send(response.body);
+              if (!response.body) {
+                res.end();
+              } else {
+                res.send(response.body);
+              }
+
               return response;
             });
         }
