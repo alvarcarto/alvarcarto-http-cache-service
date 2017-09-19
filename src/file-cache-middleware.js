@@ -31,10 +31,18 @@ function createMiddleware(_opts = {}) {
     const key = opts.encodeKey(req);
     const filePath = path.join(opts.cacheDir, key);
 
-    return fs.readFileAsync(filePath, { encoding: null })
-      .then((bytes) => {
+    return BPromise.props({
+      fileData: fs.readFileAsync(filePath, { encoding: null }),
+      fileMeta: fs.readFileAsync(filePathToMetaPath(filePath), { encoding: 'utf8' })
+        .then(content => JSON.parse(content)),
+    })
+      .then(({ fileData, fileMeta }) => {
         console.log(`Serving ${key} from cache ..`);
-        res.send(bytes);
+        _.forEach(fileMeta.headers, (headerVal, headerKey) => {
+          res.set(headerKey, headerVal);
+        });
+
+        res.send(fileData);
       })
       .catch((err) => {
         if (err.code === 'ENOENT') {
@@ -48,13 +56,22 @@ function createMiddleware(_opts = {}) {
           }))
             .tap((response) => {
               if (response.statusCode === 200 && response.body) {
-                return fs.writeFileAsync(filePath, response.body, { encoding: null });
+                const meta = {
+                  headers: {
+                    'content-type': response.headers['content-type'],
+                  },
+                };
+
+                return fs.writeFileAsync(filePath, response.body, { encoding: null })
+                  .then(() => fs.writeFileAsync(filePathToMetaPath(filePath), JSON.stringify(meta, null, 2), { encoding: 'utf8' }));
               }
 
               return BPromise.resolve();
             })
             .then((response) => {
+              res.set('content-type', response.headers['content-type']);
               res.status(response.statusCode);
+
               if (!response.body) {
                 res.end();
               } else {
@@ -66,8 +83,13 @@ function createMiddleware(_opts = {}) {
         }
 
         throw err;
-      });
+      })
+      .catch(err => next(err));
   };
+}
+
+function filePathToMetaPath(filePath) {
+  return `${filePath}-meta.json`;
 }
 
 module.exports = createMiddleware;
