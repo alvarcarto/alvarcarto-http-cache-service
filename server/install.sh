@@ -25,7 +25,7 @@ sudo setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
 
 sudo mkdir -p /etc/caddy
 sudo chown root:www-data /etc/caddy
-sudo mkdir /etc/ssl/caddy
+sudo mkdir -p /etc/ssl/caddy
 sudo chown -R www-data:root /etc/ssl/caddy
 sudo chmod 0770 /etc/ssl/caddy
 
