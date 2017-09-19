@@ -4,4 +4,5 @@ node_modules
 *.inlined.html
 .geocode-cache.json
 
-cache
+cache/*
+!cache/.gitkeep
