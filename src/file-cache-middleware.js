@@ -46,7 +46,13 @@ function createMiddleware(_opts = {}) {
             simple: false,
             encoding: null,
           }))
-            .tap(response => fs.writeFileAsync(filePath, response.body, { encoding: null }))
+            .tap((response) => {
+              if (response.body) {
+                return fs.writeFileAsync(filePath, response.body, { encoding: null });
+              }
+
+              return BPromise.resolve();
+            })
             .then((response) => {
               res.status(response.statusCode);
               if (!response.body) {
