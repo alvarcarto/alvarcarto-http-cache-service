@@ -3,6 +3,8 @@
 set -e
 set -x
 
+cd server
+
 wget https://github.com/mholt/caddy/releases/download/v0.10.9/caddy_v0.10.9_linux_amd64.tar.gz
 mkdir caddy_v0.10.9_linux_amd64
 cd caddy_v0.10.9_linux_amd64
@@ -28,7 +30,7 @@ sudo chown -R www-data:root /etc/ssl/caddy
 sudo chmod 0770 /etc/ssl/caddy
 
 # Setup config file
-sudo cp server/Caddyfile /etc/caddy/
+sudo cp ../Caddyfile /etc/caddy/
 sudo chown www-data:www-data /etc/caddy/Caddyfile
 sudo chmod 444 /etc/caddy/Caddyfile
 
