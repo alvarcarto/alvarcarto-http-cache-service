@@ -4,7 +4,7 @@
     "script" : "/home/alvar/volume/alvarcarto-infinity-service/src/index.js",
     "env": {
       "NODE_ENV": "production",
-      "PORT": "80",
+      "PORT": "7000",
     },
     "interpreter" : "node@8.5.0",
     "node_args": "--max_old_space_size=1024"
