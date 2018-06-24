@@ -3,6 +3,9 @@
 set -e
 set -x
 
+
+echo -e "\n\nInstalling caddy ..\n\n\n"
+
 cd server
 
 wget https://github.com/mholt/caddy/releases/download/v0.10.9/caddy_v0.10.9_linux_amd64.tar.gz
@@ -54,3 +57,30 @@ echo -e "\n\n\n---------------------------------\n"
 echo -e "Debugging, see the last paragraphs of installation instructions:"
 echo -e "https://github.com/mholt/caddy/tree/master/dist/init/linux-systemd"
 echo -e "\n---------------------------------\n\n\n"
+
+
+
+
+echo -e "\n\nInstalling node ..\n\n\n"
+
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.7/install.sh | bash
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+source ~/.bashrc
+
+nvm install 8.9.4
+nvm use 8.9.4
+
+
+
+echo -e "\n\nInstalling pm2 ..\n\n\n"
+npm install -g pm2
+
+pm2 start confs/pm2.json
+
+sleep 3
+sudo env PATH=$PATH:/home/alvar/.nvm/versions/node/v8.9.4/bin /home/alvar/.nvm/versions/node/v8.9.4/lib/node_modules/pm2/bin/pm2 startup systemd -u alvar --hp /home/alvar
+sleep 2
+pm2 save

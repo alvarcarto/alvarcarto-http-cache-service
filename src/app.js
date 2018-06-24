@@ -23,6 +23,16 @@ function createApp() {
   }));
 
   app.use(fileCache({
+    getPath: (req) => {
+      const roundFloats = s => s.replace(/[+-]?\d+\.\d+/g, match => Number(match).toFixed(2));
+      const fullPath = roundFloats(req.originalUrl);
+
+      if (fullPath !== req.originalUrl) {
+        console.log(`Rounded url parameters: ${fullPath}`);
+      }
+
+      return fullPath;
+    },
     cacheDir: config.CACHE_DIR,
     originBaseUrl: config.ORIGIN_BASE_URL,
   }));

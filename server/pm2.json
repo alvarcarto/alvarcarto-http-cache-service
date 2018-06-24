@@ -1,12 +1,13 @@
 {
   "apps" : [{
-    "name" : "infinity",
-    "script" : "/home/alvar/volume/alvarcarto-infinity-service/src/index.js",
+    "name" : "http-cache",
+    "script" : "/home/alvar/volume/alvarcarto-http-cache-service/src/index.js",
     "env": {
       "NODE_ENV": "production",
+      "CACHE_DIR": "/cache",
       "PORT": "7000",
     },
-    "interpreter" : "node@8.5.0",
+    "interpreter" : "node@8.9.6",
     "node_args": "--max_old_space_size=1024"
  }]
 }

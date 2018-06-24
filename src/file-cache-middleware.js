@@ -13,7 +13,10 @@ function createMiddleware(_opts = {}) {
     //   GET /search?q=something
     //   req.originalUrl
     //   => "/search?q=something"
-    encodeKey: req => crypto.createHash('sha256').update(req.originalUrl).digest('hex'),
+    getPath: req => req.originalUrl,
+
+    // `urlPath`  will contain to what opts.getPath returns
+    encodeKey: urlPath => crypto.createHash('sha256').update(urlPath).digest('hex'),
     cacheDir: path.join(__dirname, '../cache'),
   }, _opts);
 
@@ -28,7 +31,8 @@ function createMiddleware(_opts = {}) {
       return next(err);
     }
 
-    const key = opts.encodeKey(req);
+    const urlPath = opts.getPath(req);
+    const key = opts.encodeKey(urlPath);
     const filePath = path.join(opts.cacheDir, key);
 
     return BPromise.props({
@@ -37,7 +41,7 @@ function createMiddleware(_opts = {}) {
         .then(content => JSON.parse(content)),
     })
       .then(({ fileData, fileMeta }) => {
-        console.log(`Serving ${key} from cache ..`);
+        console.log(`Serving ${urlPath} (${key}) from cache`);
         _.forEach(fileMeta.headers, (headerVal, headerKey) => {
           res.set(headerKey, headerVal);
         });
