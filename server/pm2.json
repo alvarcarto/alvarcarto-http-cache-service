@@ -1,7 +1,7 @@
 {
   "apps" : [{
     "name" : "http-cache",
-    "script" : "/home/alvar/volume/alvarcarto-http-cache-service/src/index.js",
+    "script" : "/home/alvar/alvarcarto-http-cache-service/src/index.js",
     "env": {
       "NODE_ENV": "production",
       "CACHE_DIR": "/cache",
