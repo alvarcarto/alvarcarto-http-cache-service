@@ -78,7 +78,7 @@ nvm use 8.9.4
 echo -e "\n\nInstalling pm2 ..\n\n\n"
 npm install -g pm2
 
-pm2 start confs/pm2.json
+pm2 start server/pm2.json
 
 sleep 3
 sudo env PATH=$PATH:/home/alvar/.nvm/versions/node/v8.9.4/bin /home/alvar/.nvm/versions/node/v8.9.4/lib/node_modules/pm2/bin/pm2 startup systemd -u alvar --hp /home/alvar

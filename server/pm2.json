@@ -7,7 +7,7 @@
       "CACHE_DIR": "/cache",
       "PORT": "7000",
     },
-    "interpreter" : "node@8.9.6",
+    "interpreter" : "node@8.9.4",
     "node_args": "--max_old_space_size=1024"
  }]
 }

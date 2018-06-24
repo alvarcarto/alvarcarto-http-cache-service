@@ -102,7 +102,7 @@ Then run:
 
 ```
 screen -S install
-./install.sh
+./server/install.sh
 ```
 
 Now the server should have all the components installed and node processes
