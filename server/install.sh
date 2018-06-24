@@ -59,8 +59,8 @@ sudo systemctl start caddy.service
 sudo systemctl enable caddy.service
 
 # Add access.log if it doesn't yet exist
-sudo touch /var/log/access.log
-sudo chown www-data:www-data /var/log/access.log
+sudo touch /cache/access.log
+sudo chown www-data:www-data /cache/access.log
 
 # Debugging, see the last paragraphs of installation instructions:
 # https://github.com/mholt/caddy/tree/master/dist/init/linux-systemd
