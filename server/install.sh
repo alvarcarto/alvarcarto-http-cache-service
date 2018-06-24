@@ -3,6 +3,18 @@
 set -e
 set -x
 
+echo -e "\n\Updating apt-get dependencies ..\n\n\n"
+
+# Fix locale errors
+sudo -H -u root bash -c 'echo "export LC_ALL=\"en_US.UTF-8\"" >> /etc/environment'
+source /etc/environment
+
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install git -y
+
+
+
 
 echo -e "\n\nInstalling caddy ..\n\n\n"
 
@@ -55,7 +67,7 @@ sudo chown www-data:www-data /var/log/access.log
 
 echo -e "\n\n\n---------------------------------\n"
 echo -e "Debugging, see the last paragraphs of installation instructions:"
-echo -e "https://github.com/mholt/caddy/tree/master/dist/init/linux-systemd"
+echo -e "https://github.com/mholt/caddy/tree/e2635666730e24bfbc2408811be089502338cbc4/dist/init/linux-systemd"
 echo -e "\n---------------------------------\n\n\n"
 
 
@@ -72,6 +84,11 @@ source ~/.bashrc
 
 nvm install 8.9.4
 nvm use 8.9.4
+
+
+echo -e "\n\nInstalling npm dependencies ..\n\n\n"
+
+npm install
 
 
 
