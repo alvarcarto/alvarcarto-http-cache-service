@@ -24,7 +24,10 @@ function createApp() {
 
   app.use(fileCache({
     getPath: (req) => {
-      const roundFloats = s => s.replace(/[+-]?\d+\.\d+/g, match => Number(match).toFixed(2));
+      // 3th decimal: 110 m accuracy
+      // 4th decimal: 11m accuracy
+      // 5th decimal: 1.1m accuracy
+      const roundFloats = s => s.replace(/[+-]?\d+\.\d+/g, match => Number(match).toFixed(5));
       const fullPath = roundFloats(req.originalUrl);
 
       if (fullPath !== req.originalUrl) {

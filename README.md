@@ -54,7 +54,7 @@ sudo fdisk -l
 sudo mkfs.ext4 /dev/sdb
 
 sudo mkdir -p /cache
-sudo chown alvar: /cache
+sudo chown alvar:alvar /cache
 # Mount now
 sudo mount /dev/sdb /cache
 
