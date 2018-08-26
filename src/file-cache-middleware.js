@@ -1,11 +1,43 @@
 const BPromise = require('bluebird');
 const crypto = require('crypto');
+const genericPool = require('generic-pool');
 const requestPromise = require('request-promise');
 const _ = require('lodash');
 const path = require('path');
 const fs = require('fs');
+const config = require('./config');
+
+// Use generic-pool to limit the max concurrent requests into origin, we are using the
+// lib with resource that isn't exactly similar to e.g. database connection which is constantly
+// open but the usage is still valid.
+const poolFactory = {
+  // This way each function get's a new identity so that generic-pool doesn't
+  // mix up the "resources"
+  create: () => (...args) => requestPromise.apply(requestPromise, args),
+  destroy: () => null,
+};
+const requestPool = genericPool.createPool(poolFactory, {
+  min: 1,
+  max: config.MAX_CONCURRENT_REQUESTS_TO_ORIGIN,
+  acquireTimeoutMillis: 1000 * 60 * 2,
+  Promise: BPromise,
+});
 
 BPromise.promisifyAll(fs);
+
+function withPoolResource(func) {
+  let resource;
+  return requestPool.acquire()
+    .then((_resource) => {
+      resource = _resource;
+      return func(resource);
+    })
+    .finally(() => {
+      if (resource) {
+        requestPool.release(resource);
+      }
+    });
+}
 
 function createMiddleware(_opts = {}) {
   const opts = _.merge({
@@ -48,48 +80,49 @@ function createMiddleware(_opts = {}) {
 
         res.send(fileData);
       })
-      .catch((err) => {
-        if (err.code === 'ENOENT') {
-          console.log('Fetching from origin ..');
+      .catch(async (err) => {
+        if (err.code !== 'ENOENT') {
+          throw err;
+        }
 
-          return BPromise.resolve(requestPromise({
+        console.log('Fetching from origin ..');
+
+        const response = await withPoolResource(requestPromiseInstance =>
+          BPromise.resolve(requestPromiseInstance({
             url: opts.originBaseUrl + req.originalUrl,
             resolveWithFullResponse: true,
             simple: false,
             encoding: null,
           }))
-            .tap((response) => {
-              if (response.statusCode === 200 && response.body) {
-                const meta = {
-                  meta: {
-                    originalUrl: req.originalUrl,
-                  },
-                  headers: {
-                    'content-type': response.headers['content-type'],
-                  },
-                };
+            .tap(() => BPromise.delay(10000))
+        );
 
-                return fs.writeFileAsync(filePath, response.body, { encoding: null })
-                  .then(() => fs.writeFileAsync(filePathToMetaPath(filePath), JSON.stringify(meta, null, 2), { encoding: 'utf8' }));
-              }
+        if (response.statusCode === 200 && response.body) {
+          const meta = {
+            meta: {
+              originalUrl: req.originalUrl,
+            },
+            headers: {
+              'content-type': response.headers['content-type'],
+            },
+          };
 
-              return BPromise.resolve();
-            })
-            .then((response) => {
-              res.set('content-type', response.headers['content-type']);
-              res.status(response.statusCode);
-
-              if (!response.body) {
-                res.end();
-              } else {
-                res.send(response.body);
-              }
-
-              return response;
-            });
+          await fs.writeFileAsync(filePath, response.body, { encoding: null });
+          await fs.writeFileAsync(filePathToMetaPath(filePath), JSON.stringify(meta, null, 2), {
+            encoding: 'utf8',
+          });
         }
 
-        throw err;
+        res.set('content-type', response.headers['content-type']);
+        res.status(response.statusCode);
+
+        if (!response.body) {
+          res.end();
+        } else {
+          res.send(response.body);
+        }
+
+        return response;
       })
       .catch(err => next(err));
   };

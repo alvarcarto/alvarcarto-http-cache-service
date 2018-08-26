@@ -8,6 +8,8 @@
   "extends": "airbnb-base",
   "rules": {
     "no-console": "off",
+    "comma-dangle": "off",
+    "function-paren-newline": "off",
     "no-implicit-coercion": "error",
     "no-process-env": "error",
     "no-path-concat": "error",
