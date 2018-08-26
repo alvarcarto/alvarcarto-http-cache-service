@@ -21,6 +21,9 @@ passwd
 
 adduser alvar
 adduser alvar sudo
+
+# Change hostname
+hostnamectl set-hostname <name>
 ```
 
 You can save the server to your local .ssh config:
@@ -33,7 +36,15 @@ Host <name>
     IdentityFile ~/.ssh/<name>.key
 ```
 
-Start a new ssh session with `ssh alvar@<name>`. In the remote server, first mount the external SSD disk:
+Start a new ssh session with `ssh alvar@<name>`.
+```
+cd
+mkdir .ssh
+nano .ssh/authorized_keys
+# Copy paste the public key which we just generated and save file
+```
+
+In the remote server, first mount the external SSD disk:
 
 ```
 # Find which device is the external 100GB disk
@@ -79,7 +90,7 @@ sudo nano /etc/ssh/sshd_config
 # And set PermitRootLogin no
 
 # Restart
-service ssh restart
+sudo service ssh restart
 ```
 
 Add public cert and private key for Caddy:
@@ -96,6 +107,25 @@ sudo nano /etc/caddy/key.pem
 sudo chown www-data:www-data /etc/caddy/cert.pem /etc/caddy/key.pem
 sudo chmod 644 /etc/caddy/cert.pem
 sudo chmod 600 /etc/caddy/key.pem
+```
+
+Run `sudo nano /etc/systemd/system/caddy.service` and uncomment the following lines:
+
+```
+; The following additional security directives only work with systemd v229 or later.
+; They further retrict privileges that can be gained by caddy. Uncomment if you like.
+; Note that you may have to add capabilities required by any plugins in use.
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+```
+
+Then run:
+```
+sudo systemctl daemon-reload
+sudo systemctl restart caddy
+
+# see if all went ok: sudo cat /var/log/syslog
 ```
 
 Then run:

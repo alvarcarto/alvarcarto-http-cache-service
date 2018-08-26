@@ -24,6 +24,7 @@ wget https://github.com/mholt/caddy/releases/download/v0.10.9/caddy_v0.10.9_linu
 mkdir caddy_v0.10.9_linux_amd64
 cd caddy_v0.10.9_linux_amd64
 tar zxvvf ../caddy_v0.10.9_linux_amd64.tar.gz
+cd ../..
 
 # Following these instructions https://github.com/mholt/caddy/tree/master/dist/init/linux-systemd
 
