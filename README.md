@@ -79,7 +79,7 @@ echo "defscrollback 50000" >> ~/.screenrc
 echo "deflog on" >> ~/.screenrc
 echo "logfile /home/alvar/screenlog.%n" >> ~/.screenrc
 
-git clone https://alvarcarto-integration:fab7f21687f2cea5dfb2971ea69821b5e5cb87a2@github.com/kimmobrunfeldt/alvarcarto-http-cache-service.git
+git clone https://alvarcarto-integration:c20a4fe9a8771c17eab5f0470fba434ab2fcf901@github.com/kimmobrunfeldt/alvarcarto-http-cache-service.git
 cd alvarcarto-http-cache-service
 ```
 
