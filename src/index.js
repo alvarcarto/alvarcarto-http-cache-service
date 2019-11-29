@@ -1,4 +1,5 @@
 const BPromise = require('bluebird');
+const { startWatchLoop, stopWatchLoop } = require('./cache-cleaner');
 const config = require('./config');
 
 BPromise.config({
@@ -18,6 +19,11 @@ const server = app.listen(config.PORT, () => {
   );
 });
 enableDestroy(server);
+
+startWatchLoop({
+  cacheDir: config.CACHE_DIR,
+  maxCacheDirSize: config.MAX_CACHE_DIR_SIZE,
+});
 
 function closeServer(signal) {
   console.log(`${signal} received`);

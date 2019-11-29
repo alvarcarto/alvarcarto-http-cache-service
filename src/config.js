@@ -6,6 +6,7 @@ const config = {
   PORT: process.env.PORT || 7000,
   NODE_ENV: process.env.NODE_ENV,
   CORS_ORIGIN: process.env.CORS_ORIGIN || '*',
+  MAX_CACHE_DIR_SIZE: process.env.MAX_CACHE_DIR_SIZE || '70GB',
   CACHE_INCLUDE_MIME_TYPES: process.env.CACHE_INCLUDE_MIME_TYPES,
   CACHE_EXCLUDE_MIME_TYPES: process.env.CACHE_EXCLUDE_MIME_TYPES,
   CACHE_DIR: process.env.CACHE_DIR || path.join(__dirname, '../cache'),

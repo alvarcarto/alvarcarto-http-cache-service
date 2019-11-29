@@ -4,6 +4,7 @@
     "script" : "/home/alvar/alvarcarto-http-cache-service/src/index.js",
     "env": {
       "NODE_ENV": "production",
+      "CACHE_INCLUDE_MIME_TYPES": "image/* video/* audio/*",
       "CACHE_DIR": "/cache",
       "PORT": "7000"
     },

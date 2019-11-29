@@ -1,6 +1,7 @@
 const BPromise = require('bluebird');
 const crypto = require('crypto');
 const genericPool = require('generic-pool');
+const moment = require('moment');
 const requestPromise = require('request-promise');
 const _ = require('lodash');
 const path = require('path');
@@ -104,6 +105,7 @@ function createMiddleware(_opts = {}) {
           const meta = {
             meta: {
               originalUrl: req.originalUrl,
+              createdAt: moment().toISOString(),
             },
             headers: {
               'content-type': response.headers['content-type'],
