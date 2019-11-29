@@ -1,5 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
+const _ = require('lodash');
+const minimatch = require('minimatch');
 const compression = require('compression');
 const cors = require('cors');
 const fileCache = require('./file-cache-middleware');
@@ -35,6 +37,20 @@ function createApp() {
       }
 
       return fullPath;
+    },
+    selector: (incomingReq, originRes) => {
+      const contentType = originRes.headers['content-type'];
+
+      const shouldInclude = _.some(
+        config.CACHE_INCLUDE_MIME_TYPES,
+        pattern => minimatch(contentType, pattern)
+      );
+      const shouldExclude = _.some(
+        config.CACHE_EXCLUDE_MIME_TYPES,
+        pattern => minimatch(contentType, pattern)
+      );
+
+      return shouldInclude && !shouldExclude;
     },
     cacheDir: config.CACHE_DIR,
     originBaseUrl: config.ORIGIN_BASE_URL,

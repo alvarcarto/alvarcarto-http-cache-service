@@ -47,6 +47,9 @@ function createMiddleware(_opts = {}) {
     //   => "/search?q=something"
     getPath: req => req.originalUrl,
 
+    // Cache everything
+    selector: () => true,
+
     // `urlPath`  will contain to what opts.getPath returns
     encodeKey: urlPath => crypto.createHash('sha256').update(urlPath).digest('hex'),
     cacheDir: path.join(__dirname, '../cache'),
@@ -97,7 +100,8 @@ function createMiddleware(_opts = {}) {
             .tap(() => BPromise.delay(10000))
         );
 
-        if (response.statusCode === 200 && response.body) {
+        const shouldCache = opts.selector(req, response);
+        if (shouldCache && response.statusCode === 200 && response.body) {
           const meta = {
             meta: {
               originalUrl: req.originalUrl,
