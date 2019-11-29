@@ -5,7 +5,7 @@
     "env": {
       "NODE_ENV": "production",
       "CACHE_INCLUDE_MIME_TYPES": "image/* video/* audio/*",
-      "CACHE_DIR": "/cache",
+      "CACHE_DIR": "/cache/files",
       "PORT": "7000"
     },
     "interpreter" : "node@8.9.4",
