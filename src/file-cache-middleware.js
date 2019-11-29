@@ -97,7 +97,6 @@ function createMiddleware(_opts = {}) {
             simple: false,
             encoding: null,
           }))
-            .tap(() => BPromise.delay(10000))
         );
 
         const shouldCache = opts.selector(req, response);
