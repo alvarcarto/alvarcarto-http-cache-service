@@ -21,7 +21,7 @@ if (process.env.MAX_CONCURRENT_REQUESTS_TO_ORIGIN) {
 if (process.env.CACHE_INCLUDE_MIME_TYPES) {
   config.CACHE_INCLUDE_MIME_TYPES = process.env.CACHE_INCLUDE_MIME_TYPES.split(' ');
 } else {
-  config.CACHE_INCLUDE_MIME_TYPES = ['*'];
+  config.CACHE_INCLUDE_MIME_TYPES = ['**'];
 }
 
 if (process.env.CACHE_EXCLUDE_MIME_TYPES) {
