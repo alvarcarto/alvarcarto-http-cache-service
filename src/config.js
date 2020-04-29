@@ -10,7 +10,7 @@ const config = {
   CACHE_INCLUDE_MIME_TYPES: process.env.CACHE_INCLUDE_MIME_TYPES,
   CACHE_EXCLUDE_MIME_TYPES: process.env.CACHE_EXCLUDE_MIME_TYPES,
   CACHE_DIR: process.env.CACHE_DIR || path.join(__dirname, '../cache'),
-  ORIGIN_BASE_URL: process.env.ORIGIN_BASE_URL || 'http://54.36.173.210',
+  ORIGIN_BASE_URL: process.env.ORIGIN_BASE_URL || 'https://tile-api.alvarcarto.com',
   MAX_CONCURRENT_REQUESTS_TO_ORIGIN: 3,
 };
 
