@@ -2,10 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const BPromise = require('bluebird');
 const _ = require('lodash');
-const chalk = require('chalk');
 const Confirm = require('prompt-confirm');
 const find = require('find');
-const minimatch = require('minimatch');
 const config = require('../src/config');
 
 BPromise.promisifyAll(fs);
