@@ -77,6 +77,12 @@ function createMiddleware(_opts = {}) {
         .then(content => JSON.parse(content)),
     })
       .then(({ fileData, fileMeta }) => {
+        if (req.query.noCache === 'true') {
+          const err = new Error('Skipping cache ..');
+          err.code = 'ENOENT';
+          throw err;
+        }
+
         console.log(`Serving ${urlPath} (${key}) from cache`);
         _.forEach(fileMeta.headers, (headerVal, headerKey) => {
           res.set(headerKey, headerVal);

@@ -57,6 +57,7 @@ async function main() {
   const pattern = process.argv[2];
   if (!pattern) {
     console.error(`Usage: ${process.argv[1]} <pattern>`);
+    console.error('Where <pattern> is a regex compared against the originalUrl');
     process.exit(2);
   }
 
