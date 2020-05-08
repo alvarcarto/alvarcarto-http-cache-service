@@ -100,8 +100,7 @@ function createMiddleware(_opts = {}) {
           }))
         );
 
-        const shouldCache = opts.selector(req, response);
-        if (shouldCache && response.statusCode === 200 && response.body) {
+        if (response.statusCode === 200 && response.body && opts.selector(req, response)) {
           const meta = {
             meta: {
               originalUrl: req.originalUrl,
