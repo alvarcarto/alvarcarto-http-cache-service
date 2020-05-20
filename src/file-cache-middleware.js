@@ -8,6 +8,14 @@ const path = require('path');
 const fs = require('fs');
 const config = require('./config');
 
+const HEADERS_TO_NOT_PROXY = [
+  'connection',
+  'content-length',
+  'content-md5',
+  'host',
+  'transfer-encoding',
+];
+
 // Use generic-pool to limit the max concurrent requests into origin, we are using the
 // lib with resource that isn't exactly similar to e.g. database connection which is constantly
 // open but the usage is still valid.
@@ -100,6 +108,7 @@ function createMiddleware(_opts = {}) {
         const response = await withPoolResource(requestPromiseInstance =>
           BPromise.resolve(requestPromiseInstance({
             url: opts.originBaseUrl + req.originalUrl,
+            headers: _.omit(req.headers, HEADERS_TO_NOT_PROXY),
             resolveWithFullResponse: true,
             simple: false,
             encoding: null,
