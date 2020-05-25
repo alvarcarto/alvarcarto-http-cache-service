@@ -14,6 +14,7 @@ const HEADERS_TO_NOT_PROXY = [
   'content-md5',
   'host',
   'transfer-encoding',
+  'accept-encoding',
 ];
 
 // Use generic-pool to limit the max concurrent requests into origin, we are using the
@@ -104,7 +105,6 @@ function createMiddleware(_opts = {}) {
         }
 
         console.log('Fetching from origin ..');
-
         const response = await withPoolResource(requestPromiseInstance =>
           BPromise.resolve(requestPromiseInstance({
             url: opts.originBaseUrl + req.originalUrl,
